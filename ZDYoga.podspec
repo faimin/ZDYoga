@@ -13,10 +13,13 @@ Pod::Spec.new do |spec|
 
   spec.summary = 'An embeddable and performant flexbox layout engine with bindings for multiple languages'
 
-  spec.authors = {'Meta Open Source' => 'opensource@meta.com'}
+  spec.authors = {
+    'Meta Open Source' => 'opensource@meta.com', 
+    'faimin' => 'fuxianchao@gmail.com'
+}
   spec.source = {
     :git => 'https://github.com/faimin/yoga.git',
-    :tag => "v#{spec.version.to_s}",
+    :tag => "#{spec.version.to_s}",
   }
 
   spec.ios.deployment_target = "10.0"
