@@ -12,9 +12,9 @@ using namespace facebook::yoga;
 namespace facebook::yoga {
 bool configUpdateInvalidatesLayout(YGConfigRef a, YGConfigRef b) {
   return a->getErrata() != b->getErrata() ||
-         a->getEnabledExperiments() != b->getEnabledExperiments() ||
-         a->getPointScaleFactor() != b->getPointScaleFactor() ||
-         a->useWebDefaults() != b->useWebDefaults();
+      a->getEnabledExperiments() != b->getEnabledExperiments() ||
+      a->getPointScaleFactor() != b->getPointScaleFactor() ||
+      a->useWebDefaults() != b->useWebDefaults();
 }
 } // namespace facebook::yoga
 
@@ -26,16 +26,21 @@ void YGConfig::setUseWebDefaults(bool useWebDefaults) {
   flags_.useWebDefaults = useWebDefaults;
 }
 
-bool YGConfig::useWebDefaults() const { return flags_.useWebDefaults; }
+bool YGConfig::useWebDefaults() const {
+  return flags_.useWebDefaults;
+}
 
 void YGConfig::setShouldPrintTree(bool printTree) {
   flags_.printTree = printTree;
 }
 
-bool YGConfig::shouldPrintTree() const { return flags_.printTree; }
+bool YGConfig::shouldPrintTree() const {
+  return flags_.printTree;
+}
 
-void YGConfig::setExperimentalFeatureEnabled(YGExperimentalFeature feature,
-                                             bool enabled) {
+void YGConfig::setExperimentalFeatureEnabled(
+    YGExperimentalFeature feature,
+    bool enabled) {
   experimentalFeatures_.set(feature, enabled);
 }
 
@@ -48,13 +53,21 @@ ExperimentalFeatureSet YGConfig::getEnabledExperiments() const {
   return experimentalFeatures_;
 }
 
-void YGConfig::setErrata(YGErrata errata) { errata_ = errata; }
+void YGConfig::setErrata(YGErrata errata) {
+  errata_ = errata;
+}
 
-void YGConfig::addErrata(YGErrata errata) { errata_ |= errata; }
+void YGConfig::addErrata(YGErrata errata) {
+  errata_ |= errata;
+}
 
-void YGConfig::removeErrata(YGErrata errata) { errata_ &= (~errata); }
+void YGConfig::removeErrata(YGErrata errata) {
+  errata_ &= (~errata);
+}
 
-YGErrata YGConfig::getErrata() const { return errata_; }
+YGErrata YGConfig::getErrata() const {
+  return errata_;
+}
 
 bool YGConfig::hasErrata(YGErrata errata) const {
   return (errata_ & errata) != YGErrataNone;
@@ -64,11 +77,17 @@ void YGConfig::setPointScaleFactor(float pointScaleFactor) {
   pointScaleFactor_ = pointScaleFactor;
 }
 
-float YGConfig::getPointScaleFactor() const { return pointScaleFactor_; }
+float YGConfig::getPointScaleFactor() const {
+  return pointScaleFactor_;
+}
 
-void YGConfig::setContext(void *context) { context_ = context; }
+void YGConfig::setContext(void* context) {
+  context_ = context;
+}
 
-void *YGConfig::getContext() const { return context_; }
+void* YGConfig::getContext() const {
+  return context_;
+}
 
 void YGConfig::setLogger(YGLogger logger) {
   logger_.noContext = logger;
@@ -80,10 +99,17 @@ void YGConfig::setLogger(LogWithContextFn logger) {
   flags_.loggerUsesContext = true;
 }
 
-void YGConfig::setLogger(std::nullptr_t) { setLogger(YGLogger{nullptr}); }
+void YGConfig::setLogger(std::nullptr_t) {
+  setLogger(YGLogger{nullptr});
+}
 
-void YGConfig::log(YGConfig *config, YGNode *node, YGLogLevel logLevel,
-                   void *logContext, const char *format, va_list args) const {
+void YGConfig::log(
+    YGConfig* config,
+    YGNode* node,
+    YGLogLevel logLevel,
+    void* logContext,
+    const char* format,
+    va_list args) const {
   if (flags_.loggerUsesContext) {
     logger_.withContext(config, node, logLevel, logContext, format, args);
   } else {
@@ -105,14 +131,16 @@ void YGConfig::setCloneNodeCallback(std::nullptr_t) {
   setCloneNodeCallback(YGCloneNodeFunc{nullptr});
 }
 
-YGNodeRef YGConfig::cloneNode(YGNodeRef node, YGNodeRef owner, int childIndex,
-                              void *cloneContext) const {
+YGNodeRef YGConfig::cloneNode(
+    YGNodeRef node,
+    YGNodeRef owner,
+    int childIndex,
+    void* cloneContext) const {
   YGNodeRef clone = nullptr;
   if (cloneNodeCallback_.noContext != nullptr) {
     clone = flags_.cloneNodeUsesContext
-                ? cloneNodeCallback_.withContext(node, owner, childIndex,
-                                                 cloneContext)
-                : cloneNodeCallback_.noContext(node, owner, childIndex);
+        ? cloneNodeCallback_.withContext(node, owner, childIndex, cloneContext)
+        : cloneNodeCallback_.noContext(node, owner, childIndex);
   }
   if (clone == nullptr) {
     clone = YGNodeClone(node);

@@ -54,10 +54,11 @@ struct YGCollectFlexItemsRowValues {
   float crossDim;
 };
 
-bool YGValueEqual(const YGValue &a, const YGValue &b);
-inline bool YGValueEqual(facebook::yoga::detail::CompactValue a,
-                         facebook::yoga::detail::CompactValue b) {
-  return YGValueEqual((YGValue)a, (YGValue)b);
+bool YGValueEqual(const YGValue& a, const YGValue& b);
+inline bool YGValueEqual(
+    facebook::yoga::detail::CompactValue a,
+    facebook::yoga::detail::CompactValue b) {
+  return YGValueEqual((YGValue) a, (YGValue) b);
 }
 
 // This custom float equality function returns true if either absolute
@@ -68,8 +69,9 @@ bool YGDoubleEqual(const double a, const double b);
 
 float YGFloatMax(const float a, const float b);
 
-YGFloatOptional YGFloatOptionalMax(const YGFloatOptional op1,
-                                   const YGFloatOptional op2);
+YGFloatOptional YGFloatOptionalMax(
+    const YGFloatOptional op1,
+    const YGFloatOptional op2);
 
 float YGFloatMin(const float a, const float b);
 
@@ -77,8 +79,9 @@ float YGFloatMin(const float a, const float b);
 // YGFloatsEqual, as the default float comparison operator will not work(Look
 // at the comments of YGFloatsEqual function).
 template <std::size_t size>
-bool YGFloatArrayEqual(const std::array<float, size> &val1,
-                       const std::array<float, size> &val2) {
+bool YGFloatArrayEqual(
+    const std::array<float, size>& val1,
+    const std::array<float, size>& val2) {
   bool areEqual = true;
   for (std::size_t i = 0; i < size && areEqual; ++i) {
     areEqual = YGFloatsEqual(val1[i], val2[i]);
@@ -89,39 +92,42 @@ bool YGFloatArrayEqual(const std::array<float, size> &val1,
 // This function returns 0 if YGFloatIsUndefined(val) is true and val otherwise
 float YGFloatSanitize(const float val);
 
-YGFlexDirection YGFlexDirectionCross(const YGFlexDirection flexDirection,
-                                     const YGDirection direction);
+YGFlexDirection YGFlexDirectionCross(
+    const YGFlexDirection flexDirection,
+    const YGDirection direction);
 
 inline bool YGFlexDirectionIsRow(const YGFlexDirection flexDirection) {
   return flexDirection == YGFlexDirectionRow ||
-         flexDirection == YGFlexDirectionRowReverse;
+      flexDirection == YGFlexDirectionRowReverse;
 }
 
-inline YGFloatOptional YGResolveValue(const YGValue value,
-                                      const float ownerSize) {
+inline YGFloatOptional YGResolveValue(
+    const YGValue value,
+    const float ownerSize) {
   switch (value.unit) {
-  case YGUnitPoint:
-    return YGFloatOptional{value.value};
-  case YGUnitPercent:
-    return YGFloatOptional{value.value * ownerSize * 0.01f};
-  default:
-    return YGFloatOptional{};
+    case YGUnitPoint:
+      return YGFloatOptional{value.value};
+    case YGUnitPercent:
+      return YGFloatOptional{value.value * ownerSize * 0.01f};
+    default:
+      return YGFloatOptional{};
   }
 }
 
-inline YGFloatOptional
-YGResolveValue(facebook::yoga::detail::CompactValue value, float ownerSize) {
-  return YGResolveValue((YGValue)value, ownerSize);
+inline YGFloatOptional YGResolveValue(
+    facebook::yoga::detail::CompactValue value,
+    float ownerSize) {
+  return YGResolveValue((YGValue) value, ownerSize);
 }
 
 inline bool YGFlexDirectionIsColumn(const YGFlexDirection flexDirection) {
   return flexDirection == YGFlexDirectionColumn ||
-         flexDirection == YGFlexDirectionColumnReverse;
+      flexDirection == YGFlexDirectionColumnReverse;
 }
 
-inline YGFlexDirection
-YGResolveFlexDirection(const YGFlexDirection flexDirection,
-                       const YGDirection direction) {
+inline YGFlexDirection YGResolveFlexDirection(
+    const YGFlexDirection flexDirection,
+    const YGDirection direction) {
   if (direction == YGDirectionRTL) {
     if (flexDirection == YGFlexDirectionRow) {
       return YGFlexDirectionRowReverse;
@@ -133,8 +139,8 @@ YGResolveFlexDirection(const YGFlexDirection flexDirection,
   return flexDirection;
 }
 
-inline YGFloatOptional
-YGResolveValueMargin(facebook::yoga::detail::CompactValue value,
-                     const float ownerSize) {
+inline YGFloatOptional YGResolveValueMargin(
+    facebook::yoga::detail::CompactValue value,
+    const float ownerSize) {
   return value.isAuto() ? YGFloatOptional{0} : YGResolveValue(value, ownerSize);
 }

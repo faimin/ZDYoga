@@ -4234,8 +4234,7 @@ YOGA_EXPORT void YGNodeCalculateLayoutWithContext(
     if (node->getConfig()->shouldPrintTree()) {
       YGNodePrint(
           node,
-          (YGPrintOptions) (YGPrintOptionsLayout | YGPrintOptionsChildren |
-                            YGPrintOptionsStyle));
+          (YGPrintOptions) (YGPrintOptionsLayout | YGPrintOptionsChildren | YGPrintOptionsStyle));
     }
 #endif
   }

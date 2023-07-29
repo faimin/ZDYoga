@@ -31,13 +31,13 @@ struct YGNodeFlags {
 #pragma pack(pop)
 
 struct YOGA_EXPORT YGNode {
-  using MeasureWithContextFn = YGSize (*)(YGNode *, float, YGMeasureMode, float,
-                                          YGMeasureMode, void *);
-  using BaselineWithContextFn = float (*)(YGNode *, float, float, void *);
-  using PrintWithContextFn = void (*)(YGNode *, void *);
+  using MeasureWithContextFn =
+      YGSize (*)(YGNode*, float, YGMeasureMode, float, YGMeasureMode, void*);
+  using BaselineWithContextFn = float (*)(YGNode*, float, float, void*);
+  using PrintWithContextFn = void (*)(YGNode*, void*);
 
 private:
-  void *context_ = nullptr;
+  void* context_ = nullptr;
   YGNodeFlags flags_ = {};
   union {
     YGMeasureFunc noContext;
@@ -61,8 +61,9 @@ private:
   std::array<YGValue, 2> resolvedDimensions_ = {
       {YGValueUndefined, YGValueUndefined}};
 
-  YGFloatOptional relativePosition(const YGFlexDirection axis,
-                                   const float axisSize) const;
+  YGFloatOptional relativePosition(
+      const YGFlexDirection axis,
+      const float axisSize) const;
 
   void setMeasureFunc(decltype(measure_));
   void setBaselineFunc(decltype(baseline_));
@@ -77,7 +78,7 @@ private:
   // them (potentially incorrect) or ignore them (danger of leaks). Only ever
   // use this after checking that there are no children.
   // DO NOT CHANGE THE VISIBILITY OF THIS METHOD!
-  YGNode &operator=(YGNode &&) = default;
+  YGNode& operator=(YGNode&&) = default;
 
   using CompactValue = facebook::yoga::detail::CompactValue;
 
@@ -86,20 +87,20 @@ public:
   explicit YGNode(const YGConfigRef config);
   ~YGNode() = default; // cleanup of owner/children relationships in YGNodeFree
 
-  YGNode(YGNode &&);
+  YGNode(YGNode&&);
 
   // Does not expose true value semantics, as children are not cloned eagerly.
   // Should we remove this?
-  YGNode(const YGNode &node) = default;
+  YGNode(const YGNode& node) = default;
 
   // assignment means potential leaks of existing children, or alternatively
   // freeing unowned memory, double free, or freeing stack memory.
-  YGNode &operator=(const YGNode &) = delete;
+  YGNode& operator=(const YGNode&) = delete;
 
   // Getters
-  void *getContext() const { return context_; }
+  void* getContext() const { return context_; }
 
-  void print(void *);
+  void print(void*);
 
   bool getHasNewLayout() const { return flags_.hasNewLayout; }
 
@@ -109,27 +110,27 @@ public:
 
   bool hasMeasureFunc() const noexcept { return measure_.noContext != nullptr; }
 
-  YGSize measure(float, YGMeasureMode, float, YGMeasureMode, void *);
+  YGSize measure(float, YGMeasureMode, float, YGMeasureMode, void*);
 
   bool hasBaselineFunc() const noexcept {
     return baseline_.noContext != nullptr;
   }
 
-  float baseline(float width, float height, void *layoutContext);
+  float baseline(float width, float height, void* layoutContext);
 
   bool hasErrata(YGErrata errata) const { return config_->hasErrata(errata); }
 
   YGDirtiedFunc getDirtied() const { return dirtied_; }
 
   // For Performance reasons passing as reference.
-  YGStyle &getStyle() { return style_; }
+  YGStyle& getStyle() { return style_; }
 
-  const YGStyle &getStyle() const { return style_; }
+  const YGStyle& getStyle() const { return style_; }
 
   // For Performance reasons passing as reference.
-  YGLayout &getLayout() { return layout_; }
+  YGLayout& getLayout() { return layout_; }
 
-  const YGLayout &getLayout() const { return layout_; }
+  const YGLayout& getLayout() const { return layout_; }
 
   uint32_t getLineIndex() const { return lineIndex_; }
 
@@ -144,14 +145,14 @@ public:
   // Deprecated, use getOwner() instead.
   YGNodeRef getParent() const { return getOwner(); }
 
-  const YGVector &getChildren() const { return children_; }
+  const YGVector& getChildren() const { return children_; }
 
   // Applies a callback to all children, after cloning them if they are not
   // owned.
   template <typename T>
-  void iterChildrenAfterCloningIfNeeded(T callback, void *cloneContext) {
+  void iterChildrenAfterCloningIfNeeded(T callback, void* cloneContext) {
     int i = 0;
-    for (YGNodeRef &child : children_) {
+    for (YGNodeRef& child : children_) {
       if (child->getOwner() != this) {
         child = config_->cloneNode(child, this, i, cloneContext);
         child->setOwner(this);
@@ -176,48 +177,63 @@ public:
     return resolvedDimensions_[index];
   }
 
-  static CompactValue computeEdgeValueForColumn(const YGStyle::Edges &edges,
-                                                YGEdge edge,
-                                                CompactValue defaultValue);
+  static CompactValue computeEdgeValueForColumn(
+      const YGStyle::Edges& edges,
+      YGEdge edge,
+      CompactValue defaultValue);
 
-  static CompactValue computeEdgeValueForRow(const YGStyle::Edges &edges,
-                                             YGEdge rowEdge, YGEdge edge,
-                                             CompactValue defaultValue);
+  static CompactValue computeEdgeValueForRow(
+      const YGStyle::Edges& edges,
+      YGEdge rowEdge,
+      YGEdge edge,
+      CompactValue defaultValue);
 
-  static CompactValue computeRowGap(const YGStyle::Gutters &gutters,
-                                    CompactValue defaultValue);
+  static CompactValue computeRowGap(
+      const YGStyle::Gutters& gutters,
+      CompactValue defaultValue);
 
-  static CompactValue computeColumnGap(const YGStyle::Gutters &gutters,
-                                       CompactValue defaultValue);
+  static CompactValue computeColumnGap(
+      const YGStyle::Gutters& gutters,
+      CompactValue defaultValue);
 
   // Methods related to positions, margin, padding and border
-  YGFloatOptional getLeadingPosition(const YGFlexDirection axis,
-                                     const float axisSize) const;
+  YGFloatOptional getLeadingPosition(
+      const YGFlexDirection axis,
+      const float axisSize) const;
   bool isLeadingPositionDefined(const YGFlexDirection axis) const;
   bool isTrailingPosDefined(const YGFlexDirection axis) const;
-  YGFloatOptional getTrailingPosition(const YGFlexDirection axis,
-                                      const float axisSize) const;
-  YGFloatOptional getLeadingMargin(const YGFlexDirection axis,
-                                   const float widthSize) const;
-  YGFloatOptional getTrailingMargin(const YGFlexDirection axis,
-                                    const float widthSize) const;
+  YGFloatOptional getTrailingPosition(
+      const YGFlexDirection axis,
+      const float axisSize) const;
+  YGFloatOptional getLeadingMargin(
+      const YGFlexDirection axis,
+      const float widthSize) const;
+  YGFloatOptional getTrailingMargin(
+      const YGFlexDirection axis,
+      const float widthSize) const;
   float getLeadingBorder(const YGFlexDirection flexDirection) const;
   float getTrailingBorder(const YGFlexDirection flexDirection) const;
-  YGFloatOptional getLeadingPadding(const YGFlexDirection axis,
-                                    const float widthSize) const;
-  YGFloatOptional getTrailingPadding(const YGFlexDirection axis,
-                                     const float widthSize) const;
-  YGFloatOptional getLeadingPaddingAndBorder(const YGFlexDirection axis,
-                                             const float widthSize) const;
-  YGFloatOptional getTrailingPaddingAndBorder(const YGFlexDirection axis,
-                                              const float widthSize) const;
-  YGFloatOptional getMarginForAxis(const YGFlexDirection axis,
-                                   const float widthSize) const;
-  YGFloatOptional getGapForAxis(const YGFlexDirection axis,
-                                const float widthSize) const;
+  YGFloatOptional getLeadingPadding(
+      const YGFlexDirection axis,
+      const float widthSize) const;
+  YGFloatOptional getTrailingPadding(
+      const YGFlexDirection axis,
+      const float widthSize) const;
+  YGFloatOptional getLeadingPaddingAndBorder(
+      const YGFlexDirection axis,
+      const float widthSize) const;
+  YGFloatOptional getTrailingPaddingAndBorder(
+      const YGFlexDirection axis,
+      const float widthSize) const;
+  YGFloatOptional getMarginForAxis(
+      const YGFlexDirection axis,
+      const float widthSize) const;
+  YGFloatOptional getGapForAxis(
+      const YGFlexDirection axis,
+      const float widthSize) const;
   // Setters
 
-  void setContext(void *context) { context_ = context; }
+  void setContext(void* context) { context_ = context; }
 
   void setPrintFunc(YGPrintFunc printFunc) {
     print_.noContext = printFunc;
@@ -257,9 +273,9 @@ public:
 
   void setDirtiedFunc(YGDirtiedFunc dirtiedFunc) { dirtied_ = dirtiedFunc; }
 
-  void setStyle(const YGStyle &style) { style_ = style; }
+  void setStyle(const YGStyle& style) { style_ = style; }
 
-  void setLayout(const YGLayout &layout) { layout_ = layout; }
+  void setLayout(const YGLayout& layout) { layout_ = layout; }
 
   void setLineIndex(uint32_t lineIndex) { lineIndex_ = lineIndex; }
 
@@ -269,7 +285,7 @@ public:
 
   void setOwner(YGNodeRef owner) { owner_ = owner; }
 
-  void setChildren(const YGVector &children) { children_ = children; }
+  void setChildren(const YGVector& children) { children_ = children; }
 
   // TODO: rvalue override for setChildren
 
@@ -278,8 +294,8 @@ public:
   void setDirty(bool isDirty);
   void setLayoutLastOwnerDirection(YGDirection direction);
   void setLayoutComputedFlexBasis(const YGFloatOptional computedFlexBasis);
-  void
-  setLayoutComputedFlexBasisGeneration(uint32_t computedFlexBasisGeneration);
+  void setLayoutComputedFlexBasisGeneration(
+      uint32_t computedFlexBasisGeneration);
   void setLayoutMeasuredDimension(float measuredDimension, int index);
   void setLayoutHadOverflow(bool hadOverflow);
   void setLayoutDimension(float dimension, int index);
@@ -288,8 +304,11 @@ public:
   void setLayoutBorder(float border, int index);
   void setLayoutPadding(float padding, int index);
   void setLayoutPosition(float position, int index);
-  void setPosition(const YGDirection direction, const float mainSize,
-                   const float crossSize, const float ownerWidth);
+  void setPosition(
+      const YGDirection direction,
+      const float mainSize,
+      const float crossSize,
+      const float ownerWidth);
   void markDirtyAndPropagateDownwards();
 
   // Other methods
@@ -307,7 +326,7 @@ public:
   bool removeChild(YGNodeRef child);
   void removeChild(uint32_t index);
 
-  void cloneChildrenIfNeeded(void *);
+  void cloneChildrenIfNeeded(void*);
   void markDirtyAndPropagate();
   float resolveFlexGrow() const;
   float resolveFlexShrink() const;

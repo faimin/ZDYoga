@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "ZDYoga-internal.h"
 #include <cmath>
 #include <limits>
+#include "ZDYoga-internal.h"
 
 struct YGFloatOptional {
 private:
@@ -29,7 +29,7 @@ public:
 
 inline bool operator==(YGFloatOptional lhs, YGFloatOptional rhs) {
   return lhs.unwrap() == rhs.unwrap() ||
-         (lhs.isUndefined() && rhs.isUndefined());
+      (lhs.isUndefined() && rhs.isUndefined());
 }
 inline bool operator!=(YGFloatOptional lhs, YGFloatOptional rhs) {
   return !(lhs == rhs);
@@ -38,10 +38,16 @@ inline bool operator!=(YGFloatOptional lhs, YGFloatOptional rhs) {
 inline bool operator==(YGFloatOptional lhs, float rhs) {
   return lhs == YGFloatOptional{rhs};
 }
-inline bool operator!=(YGFloatOptional lhs, float rhs) { return !(lhs == rhs); }
+inline bool operator!=(YGFloatOptional lhs, float rhs) {
+  return !(lhs == rhs);
+}
 
-inline bool operator==(float lhs, YGFloatOptional rhs) { return rhs == lhs; }
-inline bool operator!=(float lhs, YGFloatOptional rhs) { return !(lhs == rhs); }
+inline bool operator==(float lhs, YGFloatOptional rhs) {
+  return rhs == lhs;
+}
+inline bool operator!=(float lhs, YGFloatOptional rhs) {
+  return !(lhs == rhs);
+}
 
 inline YGFloatOptional operator+(YGFloatOptional lhs, YGFloatOptional rhs) {
   return YGFloatOptional{lhs.unwrap() + rhs.unwrap()};

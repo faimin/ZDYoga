@@ -41,21 +41,21 @@ public:
   YGCachedMeasurement cachedLayout = YGCachedMeasurement();
 
   YGDirection direction() const {
-    return facebook::yoga::detail::getEnumData<YGDirection>(flags,
-                                                            directionOffset);
+    return facebook::yoga::detail::getEnumData<YGDirection>(
+        flags, directionOffset);
   }
 
   void setDirection(YGDirection direction) {
-    facebook::yoga::detail::setEnumData<YGDirection>(flags, directionOffset,
-                                                     direction);
+    facebook::yoga::detail::setEnumData<YGDirection>(
+        flags, directionOffset, direction);
   }
 
   bool hadOverflow() const {
     return facebook::yoga::detail::getBooleanData(flags, hadOverflowOffset);
   }
   void setHadOverflow(bool hadOverflow) {
-    facebook::yoga::detail::setBooleanData(flags, hadOverflowOffset,
-                                           hadOverflow);
+    facebook::yoga::detail::setBooleanData(
+        flags, hadOverflowOffset, hadOverflow);
   }
 
   bool operator==(YGLayout layout) const;
