@@ -95,9 +95,8 @@
 #endif
 
 #ifdef __cplusplus
-namespace facebook {
-namespace yoga {
-namespace enums {
+
+namespace facebook::yoga::enums {
 
 template <typename T>
 constexpr int count(); // can't use `= delete` due to a defect in clang < 3.9
@@ -109,9 +108,7 @@ constexpr int n() {
 }
 } // namespace detail
 
-} // namespace enums
-} // namespace yoga
-} // namespace facebook
+} // namespace facebook::yoga::enums
 #endif
 
 #define YG_ENUM_DECL(NAME, ...)                               \

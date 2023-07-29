@@ -20,8 +20,7 @@
 struct YGConfig;
 struct YGNode;
 
-namespace facebook {
-namespace yoga {
+namespace facebook::yoga {
 
 enum struct LayoutType : int {
   kLayout = 0,
@@ -144,5 +143,4 @@ struct Event::TypedData<Event::NodeLayout> {
   void* layoutContext;
 };
 
-} // namespace yoga
-} // namespace facebook
+} // namespace facebook::yoga

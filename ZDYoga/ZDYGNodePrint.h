@@ -17,8 +17,7 @@
 #include "ZDYoga.h"
 #endif
 
-namespace facebook {
-namespace yoga {
+namespace facebook::yoga {
 
 void YGNodeToString(
     std::string& str,
@@ -26,7 +25,6 @@ void YGNodeToString(
     YGPrintOptions options,
     uint32_t level);
 
-} // namespace yoga
-} // namespace facebook
+} // namespace facebook::yoga
 
 #endif

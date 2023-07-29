@@ -37,8 +37,7 @@ void YGNodeDeallocate(YGNodeRef node);
 
 YG_EXTERN_C_END
 
-namespace facebook {
-namespace yoga {
+namespace facebook::yoga {
 
 inline bool isUndefined(float value) {
   return std::isnan(value);
@@ -50,8 +49,7 @@ inline bool isUndefined(double value) {
 
 void throwLogicalErrorWithMessage(const char* message);
 
-} // namespace yoga
-} // namespace facebook
+} // namespace facebook::yoga
 
 extern const std::array<YGEdge, 4> trailing;
 extern const std::array<YGEdge, 4> leading;

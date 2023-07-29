@@ -20,8 +20,7 @@
 #include "ZDYoga-internal.h"
 #include "ZDUtils.h"
 
-namespace facebook {
-namespace yoga {
+namespace facebook::yoga {
 typedef std::string string;
 
 static void indent(string& base, uint32_t level) {
@@ -246,6 +245,5 @@ void YGNodeToString(
   }
   appendFormattedString(str, "</div>");
 }
-} // namespace yoga
-} // namespace facebook
+} // namespace facebook::yoga
 #endif

@@ -17,10 +17,7 @@
 #include "ZDYGEnums.h"
 #endif
 
-namespace facebook {
-namespace yoga {
-
-namespace detail {
+namespace facebook::yoga::detail {
 
 // std::bitset with one bit for each option defined in YG_ENUM_SEQ_DECL
 template <typename Enum>
@@ -72,6 +69,4 @@ inline void setBooleanData(uint8_t& flags, size_t index, bool value) {
   }
 }
 
-} // namespace detail
-} // namespace yoga
-} // namespace facebook
+} // namespace facebook::yoga::detail
