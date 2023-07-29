@@ -33,7 +33,7 @@ TEST(YGNode, measure_with_measure_fn) {
 
   n.setMeasureFunc(
       [](YGNode*, float w, YGMeasureMode wm, float h, YGMeasureMode hm) {
-        return YGSize{w * wm, h / hm};
+        return YGSize{w * static_cast<int>(wm), h / static_cast<int>(hm)};
       });
 
   ASSERT_EQ(
@@ -62,7 +62,7 @@ TEST(YGNode, switching_measure_fn_types) {
       });
   n.setMeasureFunc(
       [](YGNode*, float w, YGMeasureMode wm, float h, YGMeasureMode hm) {
-        return YGSize{w * wm, h / hm};
+        return YGSize{w * static_cast<int>(wm), h / static_cast<int>(hm)};
       });
 
   ASSERT_EQ(
