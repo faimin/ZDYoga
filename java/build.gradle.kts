@@ -21,9 +21,9 @@ val ndkVersionProperty: String by rootProject.extra
 
 android {
   namespace = "com.facebook.yoga"
-  compileSdk = 33
-  buildToolsVersion = "33.0.0"
-  ndkVersion = "23.1.7779620"
+  compileSdk = 34
+  buildToolsVersion = "34.0.0"
+  ndkVersion = "26.0.10792818"
 
   defaultConfig {
     minSdk = 21

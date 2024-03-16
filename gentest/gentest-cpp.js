@@ -91,6 +91,7 @@ CPPEmitter.prototype = Object.create(Emitter.prototype, {
   YGAlignStretch: {value: 'YGAlignStretch'},
   YGAlignSpaceBetween: {value: 'YGAlignSpaceBetween'},
   YGAlignSpaceAround: {value: 'YGAlignSpaceAround'},
+  YGAlignSpaceEvenly: {value: 'YGAlignSpaceEvenly'},
   YGAlignBaseline: {value: 'YGAlignBaseline'},
 
   YGDirectionInherit: {value: 'YGDirectionInherit'},
@@ -122,9 +123,11 @@ CPPEmitter.prototype = Object.create(Emitter.prototype, {
 
   YGOverflowHidden: {value: 'YGOverflowHidden'},
   YGOverflowVisible: {value: 'YGOverflowVisible'},
+  YGOverflowScroll: {value: 'YGOverflowScroll'},
 
   YGPositionTypeAbsolute: {value: 'YGPositionTypeAbsolute'},
   YGPositionTypeRelative: {value: 'YGPositionTypeRelative'},
+  YGPositionTypeStatic: {value: 'YGPositionTypeStatic'},
 
   YGWrapNoWrap: {value: 'YGWrapNoWrap'},
   YGWrapWrap: {value: 'YGWrapWrap'},
@@ -214,6 +217,20 @@ CPPEmitter.prototype = Object.create(Emitter.prototype, {
     value: function (nodeName, value) {
       this.push(
         'YGNodeStyleSetAlignSelf(' + nodeName + ', ' + toValueCpp(value) + ');',
+      );
+    },
+  },
+
+  YGNodeStyleSetAspectRatio: {
+    value: function (nodeName, value) {
+      this.push(
+        'YGNodeStyleSetAspectRatio' +
+          toFunctionName(value) +
+          '(' +
+          nodeName +
+          ', ' +
+          toValueCpp(value) +
+          ');',
       );
     },
   },

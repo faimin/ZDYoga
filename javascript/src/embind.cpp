@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include "./Node.h"
+#include "./Config.h"
 #include "./Layout.h"
+#include "./Node.h"
 #include "./Size.h"
 #include "./Value.h"
-#include "./Config.h"
 
-#include <yoga/Yoga.h>
 #include <emscripten/bind.h>
+#include <yoga/Yoga.h>
 
 using namespace emscripten;
 
@@ -32,13 +32,10 @@ EMSCRIPTEN_BINDINGS(YOGA_LAYOUT) {
           "setExperimentalFeatureEnabled",
           &Config::setExperimentalFeatureEnabled)
       .function("setPointScaleFactor", &Config::setPointScaleFactor)
-      .function(
-          "setUseLegacyStretchBehaviour", &Config::setUseLegacyStretchBehaviour)
       .function("setErrata", &Config::setErrata)
       .function("setUseWebDefaults", &Config::setUseWebDefaults)
       .function(
           "isExperimentalFeatureEnabled", &Config::isExperimentalFeatureEnabled)
-      .function("useLegacyStretchBehaviour", &Config::useLegacyStretchBehaviour)
       .function("getErrata", &Config::getErrata)
       .function("useWebDefaults", &Config::useWebDefaults);
 
@@ -120,6 +117,8 @@ EMSCRIPTEN_BINDINGS(YOGA_LAYOUT) {
       .function("setPaddingPercent", &Node::setPaddingPercent)
       .function("setGap", &Node::setGap)
 
+      .function("setDirection", &Node::setDirection)
+
       .function("getPositionType", &Node::getPositionType)
       .function("getPosition", &Node::getPosition)
 
@@ -163,6 +162,9 @@ EMSCRIPTEN_BINDINGS(YOGA_LAYOUT) {
       .function("getParent", &Node::getParent, allow_raw_pointers())
       .function("getChild", &Node::getChild, allow_raw_pointers())
 
+      .function(
+          "setAlwaysFormsContainingBlock", &Node::setAlwaysFormsContainingBlock)
+
       .function("isReferenceBaseline", &Node::isReferenceBaseline)
       .function("setIsReferenceBaseline", &Node::setIsReferenceBaseline)
 
@@ -190,5 +192,7 @@ EMSCRIPTEN_BINDINGS(YOGA_LAYOUT) {
 
       .function("getComputedMargin", &Node::getComputedMargin)
       .function("getComputedBorder", &Node::getComputedBorder)
-      .function("getComputedPadding", &Node::getComputedPadding);
+      .function("getComputedPadding", &Node::getComputedPadding)
+
+      .function("getDirection", &Node::getDirection);
 }

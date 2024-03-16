@@ -16,6 +16,7 @@ export enum Align {
   Baseline = 5,
   SpaceBetween = 6,
   SpaceAround = 7,
+  SpaceEvenly = 8,
 }
 
 export enum Dimension {
@@ -49,14 +50,14 @@ export enum Edge {
 export enum Errata {
   None = 0,
   StretchFlexBasis = 1,
+  AbsolutePositioningIncorrect = 2,
+  AbsolutePercentAgainstInnerSize = 4,
   All = 2147483647,
   Classic = 2147483646,
 }
 
 export enum ExperimentalFeature {
   WebFlexBasis = 0,
-  AbsolutePercentageAgainstPaddingEdge = 1,
-  FixJNILocalRefOverflows = 2,
 }
 
 export enum FlexDirection {
@@ -113,12 +114,6 @@ export enum PositionType {
   Absolute = 2,
 }
 
-export enum PrintOptions {
-  Layout = 1,
-  Style = 2,
-  Children = 4,
-}
-
 export enum Unit {
   Undefined = 0,
   Point = 1,
@@ -141,6 +136,7 @@ const constants = {
   ALIGN_BASELINE: Align.Baseline,
   ALIGN_SPACE_BETWEEN: Align.SpaceBetween,
   ALIGN_SPACE_AROUND: Align.SpaceAround,
+  ALIGN_SPACE_EVENLY: Align.SpaceEvenly,
   DIMENSION_WIDTH: Dimension.Width,
   DIMENSION_HEIGHT: Dimension.Height,
   DIRECTION_INHERIT: Direction.Inherit,
@@ -159,11 +155,11 @@ const constants = {
   EDGE_ALL: Edge.All,
   ERRATA_NONE: Errata.None,
   ERRATA_STRETCH_FLEX_BASIS: Errata.StretchFlexBasis,
+  ERRATA_ABSOLUTE_POSITIONING_INCORRECT: Errata.AbsolutePositioningIncorrect,
+  ERRATA_ABSOLUTE_PERCENT_AGAINST_INNER_SIZE: Errata.AbsolutePercentAgainstInnerSize,
   ERRATA_ALL: Errata.All,
   ERRATA_CLASSIC: Errata.Classic,
   EXPERIMENTAL_FEATURE_WEB_FLEX_BASIS: ExperimentalFeature.WebFlexBasis,
-  EXPERIMENTAL_FEATURE_ABSOLUTE_PERCENTAGE_AGAINST_PADDING_EDGE: ExperimentalFeature.AbsolutePercentageAgainstPaddingEdge,
-  EXPERIMENTAL_FEATURE_FIX_JNILOCAL_REF_OVERFLOWS: ExperimentalFeature.FixJNILocalRefOverflows,
   FLEX_DIRECTION_COLUMN: FlexDirection.Column,
   FLEX_DIRECTION_COLUMN_REVERSE: FlexDirection.ColumnReverse,
   FLEX_DIRECTION_ROW: FlexDirection.Row,
@@ -194,9 +190,6 @@ const constants = {
   POSITION_TYPE_STATIC: PositionType.Static,
   POSITION_TYPE_RELATIVE: PositionType.Relative,
   POSITION_TYPE_ABSOLUTE: PositionType.Absolute,
-  PRINT_OPTIONS_LAYOUT: PrintOptions.Layout,
-  PRINT_OPTIONS_STYLE: PrintOptions.Style,
-  PRINT_OPTIONS_CHILDREN: PrintOptions.Children,
   UNIT_UNDEFINED: Unit.Undefined,
   UNIT_POINT: Unit.Point,
   UNIT_PERCENT: Unit.Percent,

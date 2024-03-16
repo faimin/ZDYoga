@@ -6,10 +6,9 @@
  */
 
 #include <gtest/gtest.h>
-#include <yoga/event/event.h>
-#include <yoga/Yoga.h>
 #include <yoga/YGEnums.h>
-#include <yoga/YGNode.h>
+#include <yoga/Yoga.h>
+#include <yoga/event/event.h>
 
 #include <algorithm>
 #include <functional>
@@ -25,12 +24,11 @@ struct TypedEventTestData {};
 
 template <>
 struct TypedEventTestData<Event::LayoutPassEnd> {
-  void* layoutContext;
   LayoutData layoutData;
 };
 
 struct EventArgs {
-  const YGNode* node;
+  const YGNodeConstRef node;
   Event::Type type;
   std::unique_ptr<void, std::function<void(void*)>> dataPtr;
   std::unique_ptr<void, std::function<void(void*)>> eventTestDataPtr;
@@ -47,12 +45,17 @@ struct EventArgs {
 };
 
 class EventTest : public ::testing::Test {
-  ScopedEventSubscription subscription = {&EventTest::listen};
-  static void listen(const YGNode&, Event::Type, Event::Data);
+  ScopedEventSubscription subscription{&EventTest::listen};
+  static void listen(
+      YGNodeConstRef /*node*/,
+      Event::Type /*type*/,
+      Event::Data /*data*/);
 
-public:
+ public:
   static std::vector<EventArgs> events;
-  static EventArgs& lastEvent() { return events.back(); }
+  static EventArgs& lastEvent() {
+    return events.back();
+  }
   void TearDown() override;
 };
 
@@ -250,7 +253,7 @@ TEST_F(EventTest, layout_events_has_max_measure_cache) {
 TEST_F(EventTest, measure_functions_get_wrapped) {
   auto root = YGNodeNew();
   YGNodeSetMeasureFunc(
-      root, [](YGNodeRef, float, YGMeasureMode, float, YGMeasureMode) {
+      root, [](YGNodeConstRef, float, YGMeasureMode, float, YGMeasureMode) {
         return YGSize{};
       });
 
@@ -268,7 +271,8 @@ TEST_F(EventTest, baseline_functions_get_wrapped) {
   auto child = YGNodeNew();
   YGNodeInsertChild(root, child, 0);
 
-  YGNodeSetBaselineFunc(child, [](YGNodeRef, float, float) { return 0.0f; });
+  YGNodeSetBaselineFunc(
+      child, [](YGNodeConstRef, float, float) { return 0.0f; });
   YGNodeStyleSetFlexDirection(root, YGFlexDirectionRow);
   YGNodeStyleSetAlignItems(root, YGAlignBaseline);
 
@@ -284,16 +288,16 @@ TEST_F(EventTest, baseline_functions_get_wrapped) {
 namespace {
 
 template <Event::Type E>
-EventArgs createArgs(const YGNode& node, const Event::Data data) {
+EventArgs createArgs(YGNodeConstRef node, const Event::Data data) {
   using Data = Event::TypedData<E>;
   auto deleteData = [](void* x) { delete static_cast<Data*>(x); };
 
-  return {&node, E, {new Data{(data.get<E>())}, deleteData}, nullptr};
+  return {node, E, {new Data{(data.get<E>())}, deleteData}, nullptr};
 }
 
 template <Event::Type E>
 EventArgs createArgs(
-    const YGNode& node,
+    YGNodeConstRef node,
     const Event::Data data,
     TypedEventTestData<E> eventTestData) {
   using EventTestData = TypedEventTestData<E>;
@@ -309,7 +313,10 @@ EventArgs createArgs(
 
 } // namespace
 
-void EventTest::listen(const YGNode& node, Event::Type type, Event::Data data) {
+void EventTest::listen(
+    YGNodeConstRef node,
+    Event::Type type,
+    Event::Data data) {
   switch (type) {
     case Event::NodeAllocation:
       events.push_back(createArgs<Event::NodeAllocation>(node, data));
@@ -326,7 +333,7 @@ void EventTest::listen(const YGNode& node, Event::Type type, Event::Data data) {
     case Event::LayoutPassEnd: {
       auto& eventData = data.get<Event::LayoutPassEnd>();
       events.push_back(createArgs<Event::LayoutPassEnd>(
-          node, data, {eventData.layoutContext, *eventData.layoutData}));
+          node, data, {*eventData.layoutData}));
       break;
     }
 

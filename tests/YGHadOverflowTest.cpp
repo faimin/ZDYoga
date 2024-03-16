@@ -11,9 +11,8 @@
 using namespace ::testing;
 
 class YogaTest_HadOverflowTests : public Test {
-protected:
-  YogaTest_HadOverflowTests() {
-    config = YGConfigNew();
+ protected:
+  YogaTest_HadOverflowTests() : config(YGConfigNew()) {
     root = YGNodeNewWithConfig(config);
     YGNodeStyleSetWidth(root, 200);
     YGNodeStyleSetHeight(root, 100);
@@ -21,7 +20,7 @@ protected:
     YGNodeStyleSetFlexWrap(root, YGWrapNoWrap);
   }
 
-  ~YogaTest_HadOverflowTests() {
+  ~YogaTest_HadOverflowTests() override {
     YGNodeFreeRecursive(root);
     YGConfigFree(config);
   }

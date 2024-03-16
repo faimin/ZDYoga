@@ -54,7 +54,7 @@ class ScopedLocalRef {
           std::is_same<T, jbooleanArray>(),
       "ScopedLocalRef instantiated for invalid type");
 
-public:
+ public:
   /**
    * Constructs a ScopedLocalRef with a JNI local reference.
    *
@@ -70,18 +70,21 @@ public:
   /**
    * Move construction is allowed.
    */
-  ScopedLocalRef(ScopedLocalRef&& s) : mEnv(s.mEnv), mLocalRef(s.release()) {}
+  ScopedLocalRef(ScopedLocalRef&& s) noexcept
+      : mEnv(s.mEnv), mLocalRef(s.release()) {}
 
   /**
    * Move assignment is allowed.
    */
-  ScopedLocalRef& operator=(ScopedLocalRef&& s) {
+  ScopedLocalRef& operator=(ScopedLocalRef&& s) noexcept {
     reset(s.release());
     mEnv = s.mEnv;
     return *this;
   }
 
-  ~ScopedLocalRef() { reset(); }
+  ~ScopedLocalRef() {
+    reset();
+  }
 
   /**
    * Deletes the currently held reference and reassigns a new one to the
@@ -110,17 +113,21 @@ public:
   /**
    * Returns the underlying JNI local reference.
    */
-  T get() const { return mLocalRef; }
+  T get() const {
+    return mLocalRef;
+  }
 
   /**
    * Returns true if the underlying JNI reference is not NULL.
    */
-  operator bool() const { return mLocalRef != NULL; }
+  operator bool() const {
+    return mLocalRef != NULL;
+  }
 
   ScopedLocalRef(const ScopedLocalRef& ref) = delete;
   ScopedLocalRef& operator=(const ScopedLocalRef& other) = delete;
 
-private:
+ private:
   JNIEnv* mEnv;
   T mLocalRef;
 };

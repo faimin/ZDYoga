@@ -23,7 +23,7 @@ JavascriptEmitter.prototype = Object.create(Emitter.prototype, {
 
   emitPrologue: {
     value: function () {
-      this.push('import {Yoga} from "../tools/globals";');
+      this.push("import Yoga from 'yoga-layout';");
       this.push('import {');
       this.pushIndent();
       this.push('Align,');
@@ -120,6 +120,7 @@ JavascriptEmitter.prototype = Object.create(Emitter.prototype, {
   YGAlignStretch: {value: 'Align.Stretch'},
   YGAlignSpaceBetween: {value: 'Align.SpaceBetween'},
   YGAlignSpaceAround: {value: 'Align.SpaceAround'},
+  YGAlignSpaceEvenly: {value: 'Align.SpaceEvenly'},
   YGAlignBaseline: {value: 'Align.Baseline'},
 
   YGDirectionInherit: {value: 'Direction.Inherit'},
@@ -151,9 +152,11 @@ JavascriptEmitter.prototype = Object.create(Emitter.prototype, {
 
   YGOverflowHidden: {value: 'Overflow.Hidden'},
   YGOverflowVisible: {value: 'Overflow.Visible'},
+  YGOverflowScroll: {value: 'Overflow.Scroll'},
 
   YGPositionTypeAbsolute: {value: 'PositionType.Absolute'},
   YGPositionTypeRelative: {value: 'PositionType.Relative'},
+  YGPositionTypeStatic: {value: 'PositionType.Static'},
 
   YGAuto: {value: "'auto'"},
   YGUndefined: {value: 'undefined'},
@@ -218,6 +221,14 @@ JavascriptEmitter.prototype = Object.create(Emitter.prototype, {
   YGNodeStyleSetAlignSelf: {
     value: function (nodeName, value) {
       this.push(nodeName + '.setAlignSelf(' + toValueJavascript(value) + ');');
+    },
+  },
+
+  YGNodeStyleSetAspectRatio: {
+    value: function (nodeName, value) {
+      this.push(
+        nodeName + '.setAspectRatio(' + toValueJavascript(value) + ');',
+      );
     },
   },
 

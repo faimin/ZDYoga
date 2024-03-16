@@ -13,14 +13,14 @@
 
 namespace facebook::yoga::test {
 
-struct YOGA_EXPORT TestUtil {
+struct TestUtil {
   static void startCountingNodes();
   static int nodeCount();
   static int stopCountingNodes();
 };
 
 struct ScopedEventSubscription {
-  ScopedEventSubscription(std::function<Event::Subscriber>&&);
+  explicit ScopedEventSubscription(std::function<Event::Subscriber>&&);
   ~ScopedEventSubscription();
 };
 

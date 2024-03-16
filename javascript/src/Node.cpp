@@ -9,13 +9,13 @@
 
 #include <yoga/Yoga.h>
 
-#include "./Node.h"
-#include "./Layout.h"
-#include "./Size.h"
 #include "./Config.h"
+#include "./Layout.h"
+#include "./Node.h"
+#include "./Size.h"
 
 static YGSize globalMeasureFunc(
-    YGNodeRef nodeRef,
+    YGNodeConstRef nodeRef,
     float width,
     YGMeasureMode widthMode,
     float height,
@@ -29,7 +29,7 @@ static YGSize globalMeasureFunc(
   return ygSize;
 }
 
-static void globalDirtiedFunc(YGNodeRef nodeRef) {
+static void globalDirtiedFunc(YGNodeConstRef nodeRef) {
   Node const& node = *reinterpret_cast<Node const*>(YGNodeGetContext(nodeRef));
 
   node.callDirtiedFunc();
@@ -102,6 +102,10 @@ void Node::setAlignSelf(int alignSelf) {
 void Node::setFlexDirection(int flexDirection) {
   YGNodeStyleSetFlexDirection(
       m_node, static_cast<YGFlexDirection>(flexDirection));
+}
+
+void Node::setDirection(int direction) {
+  YGNodeStyleSetDirection(m_node, static_cast<YGDirection>(direction));
 }
 
 void Node::setFlexWrap(int flexWrap) {
@@ -259,6 +263,10 @@ int Node::getAlignSelf(void) const {
 
 int Node::getFlexDirection(void) const {
   return YGNodeStyleGetFlexDirection(m_node);
+}
+
+int Node::getDirection(void) const {
+  return YGNodeStyleGetDirection(m_node);
 }
 
 int Node::getFlexWrap(void) const {
@@ -467,4 +475,9 @@ double Node::getComputedBorder(int edge) const {
 
 double Node::getComputedPadding(int edge) const {
   return YGNodeLayoutGetPadding(m_node, static_cast<YGEdge>(edge));
+}
+
+void Node::setAlwaysFormsContainingBlock(bool alwaysFormsContainingBlock) {
+  return YGNodeSetAlwaysFormsContainingBlock(
+      m_node, alwaysFormsContainingBlock);
 }

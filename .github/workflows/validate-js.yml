@@ -1,10 +1,11 @@
-name: JavaScript
+name: Validate JavaScript
 
 on:
   pull_request:
   push:
     branches:
       - main
+      - 'release-*'
   workflow_dispatch:
 
 env:
@@ -23,6 +24,9 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup-js
 
+      - name: Restore emsdk
+        uses: ./.github/actions/cache-emsdk
+
       - name: yarn benchmark
         run: yarn benchmark
         working-directory: javascript
@@ -39,8 +43,11 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup-js
 
+      - name: Restore emsdk
+        uses: ./.github/actions/cache-emsdk
+
       - name: yarn build
-        run: yarn build
+        run: yarn build --verbose
         working-directory: javascript
 
   test:
@@ -55,6 +62,9 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup-js
 
+      - name: Restore emsdk
+        uses: ./.github/actions/cache-emsdk
+
       - name: yarn test
         run: yarn test
         working-directory: javascript
@@ -65,8 +75,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: yarn install
-        run: yarn install --frozen-lockfile
+      - name: Setup
+        uses: ./.github/actions/setup-js
 
       - name: yarn lint
         run: yarn lint
@@ -77,9 +87,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: yarn install
-        run: yarn install --frozen-lockfile
-        working-directory: javascript
+      - name: Setup
+        uses: ./.github/actions/setup-js
 
       - name: yarn tsc
         run: yarn tsc
@@ -93,6 +102,9 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup-js
+
+      - name: Restore emsdk
+        uses: ./.github/actions/cache-emsdk
 
       - name: yarn pack
         run: yarn pack --filename yoga-layout.tar.gz

@@ -135,6 +135,7 @@ JavaEmitter.prototype = Object.create(Emitter.prototype, {
   YGAlignStretch: {value: 'YogaAlign.STRETCH'},
   YGAlignSpaceBetween: {value: 'YogaAlign.SPACE_BETWEEN'},
   YGAlignSpaceAround: {value: 'YogaAlign.SPACE_AROUND'},
+  YGAlignSpaceEvenly: {value: 'YogaAlign.SPACE_EVENLY'},
   YGAlignBaseline: {value: 'YogaAlign.BASELINE'},
 
   YGDirectionInherit: {value: 'YogaDirection.INHERIT'},
@@ -166,9 +167,11 @@ JavaEmitter.prototype = Object.create(Emitter.prototype, {
 
   YGOverflowHidden: {value: 'YogaOverflow.HIDDEN'},
   YGOverflowVisible: {value: 'YogaOverflow.VISIBLE'},
+  YGOverflowScroll: {value: 'YogaOverflow.SCROLL'},
 
   YGPositionTypeAbsolute: {value: 'YogaPositionType.ABSOLUTE'},
   YGPositionTypeRelative: {value: 'YogaPositionType.RELATIVE'},
+  YGPositionTypeStatic: {value: 'YogaPositionType.STATIC'},
 
   YGUndefined: {value: 'YogaConstants.UNDEFINED'},
 
@@ -235,6 +238,12 @@ JavaEmitter.prototype = Object.create(Emitter.prototype, {
   YGNodeStyleSetAlignSelf: {
     value: function (nodeName, value) {
       this.push(nodeName + '.setAlignSelf(' + toValueJava(value) + ');');
+    },
+  },
+
+  YGNodeStyleSetAspectRatio: {
+    value: function (nodeName, value) {
+      this.push(nodeName + '.setAspectRatio(' + toValueJava(value) + 'f);');
     },
   },
 

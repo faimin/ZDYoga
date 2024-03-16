@@ -12,7 +12,7 @@ TEST(YogaTest, assert_default_values) {
   const YGNodeRef root = YGNodeNew();
 
   ASSERT_EQ(0u, YGNodeGetChildCount(root));
-  ASSERT_EQ(NULL, YGNodeGetChild(root, 1));
+  ASSERT_EQ(nullptr, YGNodeGetChild(root, 1));
 
   ASSERT_EQ(YGDirectionInherit, YGNodeStyleGetDirection(root));
   ASSERT_EQ(YGFlexDirectionColumn, YGNodeStyleGetFlexDirection(root));
@@ -20,7 +20,7 @@ TEST(YogaTest, assert_default_values) {
   ASSERT_EQ(YGAlignFlexStart, YGNodeStyleGetAlignContent(root));
   ASSERT_EQ(YGAlignStretch, YGNodeStyleGetAlignItems(root));
   ASSERT_EQ(YGAlignAuto, YGNodeStyleGetAlignSelf(root));
-  ASSERT_EQ(YGPositionTypeStatic, YGNodeStyleGetPositionType(root));
+  ASSERT_EQ(YGPositionTypeRelative, YGNodeStyleGetPositionType(root));
   ASSERT_EQ(YGWrapNoWrap, YGNodeStyleGetFlexWrap(root));
   ASSERT_EQ(YGOverflowVisible, YGNodeStyleGetOverflow(root));
   ASSERT_FLOAT_EQ(0, YGNodeStyleGetFlexGrow(root));
