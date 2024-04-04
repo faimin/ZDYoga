@@ -6,10 +6,10 @@
 
 Pod::Spec.new do |spec|
   spec.name = 'ZDYoga'
-  spec.version = '2.0.0.2'
+  spec.version = '3.0.0.1'
   spec.license =  { :type => 'MIT', :file => "LICENSE" }
-  spec.homepage = 'https://yogalayout.com/'
-  spec.documentation_url = 'https://yogalayout.com/docs'
+  spec.homepage = 'https://yogalayout.dev/'
+  spec.documentation_url = 'https://yogalayout.dev/docs'
 
   spec.summary = 'An embeddable and performant flexbox layout engine with bindings for multiple languages'
 
@@ -24,21 +24,31 @@ Pod::Spec.new do |spec|
 
   spec.ios.deployment_target = "10.0"
 
-  spec.module_name = 'ZDYoga'
+  dir_name = 'ZDYoga'
+
+  spec.module_name = dir_name
+  # spec.module_map = "#{dir_name}/module.modulemap"
   spec.requires_arc = false
   spec.pod_target_xcconfig = {
-    'DEFINES_MODULE' => 'YES'
+    'DEFINES_MODULE' => 'YES',
+    'HEADER_SEARCH_PATHS' => '"$(PODS_TARGET_SRCROOT)"',
   }
   spec.compiler_flags = [
       '-fno-omit-frame-pointer',
       '-fexceptions',
       '-Wall',
       '-Werror',
-      '-Wextra',
-      '-std=c++17',
+      '-std=c++20',
       '-fPIC'
   ]
-  spec.source_files = 'ZDYoga/**/*.{h,cpp}'
-  spec.public_header_files = 'ZDYoga/ZD{Yoga,YGEnums,YGMacros,YGValue}.h'
   spec.swift_version = '5.1'
+  spec.source_files = "#{dir_name}/**/*.{h,cpp}"
+  spec.header_mappings_dir = dir_name
+
+  public_header_files = "#{dir_name}/*.h"
+  spec.public_header_files = public_header_files
+
+  all_header_files = "#{dir_name}/**/*.h"
+  spec.private_header_files = Dir.glob(all_header_files) - Dir.glob(public_header_files)
+  spec.preserve_paths = [all_header_files]
 end
