@@ -11,16 +11,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "yoga",
+    name: "ZDYoga",
     products: [
-        .library(name: "yoga", targets: [ "core" ])
+        .library(name: "ZDYoga", targets: [ "core" ])
     ],
     targets: [
         .target(
             name: "core",
             path: ".",
             sources: [
-                "yoga"
+                "ZDYoga"
             ],
             publicHeadersPath: ".",
             cxxSettings: [

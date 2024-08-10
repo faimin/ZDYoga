@@ -73,3 +73,5 @@ local.properties
 
 # Docusarus build
 .docusaurus
+
+.build
