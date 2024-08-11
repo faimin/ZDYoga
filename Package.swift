@@ -12,6 +12,9 @@ import PackageDescription
 
 let package = Package(
     name: "ZDYoga",
+    platforms: [
+        .iOS(.v10)
+    ],
     products: [
         .library(name: "ZDYoga", targets: [ "core" ])
     ],
