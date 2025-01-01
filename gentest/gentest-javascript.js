@@ -15,6 +15,9 @@ function toValueJavascript(value) {
   if (value.match(/^[0-9.e+-]+px$/i)) return parseFloat(value);
   if (value.match(/^[0-9.e+-]+%/i)) return JSON.stringify(value);
   if (value == 'Yoga.AUTO') return '"auto"';
+  if (value == 'max-content') return '"max-content"';
+  if (value == 'fit-content') return '"fit-content"';
+  if (value == 'stretch') return '"stretch"';
   return value;
 }
 
@@ -30,6 +33,7 @@ JavascriptEmitter.prototype = Object.create(Emitter.prototype, {
       this.push('import {');
       this.pushIndent();
       this.push('Align,');
+      this.push('BoxSizing,');
       this.push('Direction,');
       this.push('Display,');
       this.push('Edge,');
@@ -170,6 +174,14 @@ JavascriptEmitter.prototype = Object.create(Emitter.prototype, {
 
   YGDisplayFlex: {value: 'Display.Flex'},
   YGDisplayNone: {value: 'Display.None'},
+  YGDisplayContents: {value: 'Display.Contents'},
+
+  YGBoxSizingBorderBox: {value: 'BoxSizing.BorderBox'},
+  YGBoxSizingContentBox: {value: 'BoxSizing.ContentBox'},
+
+  YGMaxContent: {value: 'max-content'},
+  YGFitContent: {value: 'fit-content'},
+  YGStretch: {value: 'stretch'},
 
   YGNodeCalculateLayout: {
     value: function (node, dir, _experiments) {
@@ -364,14 +376,22 @@ JavascriptEmitter.prototype = Object.create(Emitter.prototype, {
 
   YGNodeStyleSetPosition: {
     value: function (nodeName, edge, value) {
-      this.push(
-        nodeName +
-          '.setPosition(' +
-          toValueJavascript(edge) +
-          ', ' +
-          toValueJavascript(value) +
-          ');',
-      );
+      const valueStr = toValueJavascript(value);
+
+      if (valueStr == "'auto'") {
+        this.push(
+          nodeName + '.setPositionAuto(' + toValueJavascript(edge) + ');',
+        );
+      } else {
+        this.push(
+          nodeName +
+            '.setPosition(' +
+            toValueJavascript(edge) +
+            ', ' +
+            valueStr +
+            ');',
+        );
+      }
     },
   },
 
@@ -402,10 +422,18 @@ JavascriptEmitter.prototype = Object.create(Emitter.prototype, {
     },
   },
 
+  YGNodeStyleSetBoxSizing: {
+    value: function (nodeName, value) {
+      this.push(nodeName + '.setBoxSizing(' + toValueJavascript(value) + ');');
+    },
+  },
+
   YGNodeSetMeasureFunc: {
-    value: function (nodeName, innerText) {
+    value: function (nodeName, innerText, flexDirection) {
       this.push(
-        `${nodeName}.setMeasureFunc(instrinsicSizeMeasureFunc.bind("${innerText}"));`,
+        `${nodeName}.setMeasureFunc(instrinsicSizeMeasureFunc.bind({text: "${innerText}", flexDirection: ${toValueJavascript(
+          flexDirection,
+        )}}));`,
       );
     },
   },

@@ -14,6 +14,7 @@ import YGEnums from './generated/YGEnums.ts';
 
 import type {
   Align,
+  BoxSizing,
   Display,
   Edge,
   Errata,
@@ -115,6 +116,7 @@ export type Node = {
   getParent(): Node | null;
   getPosition(edge: Edge): Value;
   getPositionType(): PositionType;
+  getBoxSizing(): BoxSizing;
   getWidth(): Value;
   insertChild(child: Node, index: number): void;
   isDirty(): boolean;
@@ -132,17 +134,41 @@ export type Node = {
   setDirection(direction: Direction): void;
   setDisplay(display: Display): void;
   setFlex(flex: number | undefined): void;
-  setFlexBasis(flexBasis: number | 'auto' | `${number}%` | undefined): void;
+  setFlexBasis(
+    flexBasis:
+      | number
+      | 'auto'
+      | 'fit-content'
+      | 'max-content'
+      | 'stretch'
+      | `${number}%`
+      | undefined,
+  ): void;
   setFlexBasisPercent(flexBasis: number | undefined): void;
   setFlexBasisAuto(): void;
+  setFlexBasisFitContent(): void;
+  setFlexBasisMaxContent(): void;
+  setFlexBasisStretch(): void;
   setFlexDirection(flexDirection: FlexDirection): void;
   setFlexGrow(flexGrow: number | undefined): void;
   setFlexShrink(flexShrink: number | undefined): void;
   setFlexWrap(flexWrap: Wrap): void;
-  setHeight(height: number | 'auto' | `${number}%` | undefined): void;
+  setHeight(
+    height:
+      | number
+      | 'auto'
+      | 'fit-content'
+      | 'max-content'
+      | 'stretch'
+      | `${number}%`
+      | undefined,
+  ): void;
   setIsReferenceBaseline(isReferenceBaseline: boolean): void;
   setHeightAuto(): void;
+  setHeightFitContent(): void;
+  setHeightMaxContent(): void;
   setHeightPercent(height: number | undefined): void;
+  setHeightStretch(): void;
   setJustifyContent(justifyContent: Justify): void;
   setGap(gutter: Gutter, gapLength: number | `${number}%` | undefined): Value;
   setGapPercent(gutter: Gutter, gapLength: number | undefined): Value;
@@ -152,25 +178,83 @@ export type Node = {
   ): void;
   setMarginAuto(edge: Edge): void;
   setMarginPercent(edge: Edge, margin: number | undefined): void;
-  setMaxHeight(maxHeight: number | `${number}%` | undefined): void;
+  setMaxHeight(
+    maxHeight:
+      | number
+      | 'fit-content'
+      | 'max-content'
+      | 'stretch'
+      | `${number}%`
+      | undefined,
+  ): void;
+  setMaxHeightFitContent(): void;
+  setMaxHeightMaxContent(): void;
   setMaxHeightPercent(maxHeight: number | undefined): void;
-  setMaxWidth(maxWidth: number | `${number}%` | undefined): void;
+  setMaxHeightStretch(): void;
+  setMaxWidth(
+    maxWidth:
+      | number
+      | 'fit-content'
+      | 'max-content'
+      | 'stretch'
+      | `${number}%`
+      | undefined,
+  ): void;
+  setMaxWidthFitContent(): void;
+  setMaxWidthMaxContent(): void;
   setMaxWidthPercent(maxWidth: number | undefined): void;
+  setMaxWidthStretch(): void;
   setDirtiedFunc(dirtiedFunc: DirtiedFunction | null): void;
   setMeasureFunc(measureFunc: MeasureFunction | null): void;
-  setMinHeight(minHeight: number | `${number}%` | undefined): void;
+  setMinHeight(
+    minHeight:
+      | number
+      | 'fit-content'
+      | 'max-content'
+      | 'stretch'
+      | `${number}%`
+      | undefined,
+  ): void;
+  setMinHeightFitContent(): void;
+  setMinHeightMaxContent(): void;
   setMinHeightPercent(minHeight: number | undefined): void;
-  setMinWidth(minWidth: number | `${number}%` | undefined): void;
+  setMinHeightStretch(): void;
+  setMinWidth(
+    minWidth:
+      | number
+      | 'fit-content'
+      | 'max-content'
+      | 'stretch'
+      | `${number}%`
+      | undefined,
+  ): void;
+  setMinWidthFitContent(): void;
+  setMinWidthMaxContent(): void;
   setMinWidthPercent(minWidth: number | undefined): void;
+  setMinWidthStretch(): void;
   setOverflow(overflow: Overflow): void;
   setPadding(edge: Edge, padding: number | `${number}%` | undefined): void;
   setPaddingPercent(edge: Edge, padding: number | undefined): void;
   setPosition(edge: Edge, position: number | `${number}%` | undefined): void;
   setPositionPercent(edge: Edge, position: number | undefined): void;
   setPositionType(positionType: PositionType): void;
-  setWidth(width: number | 'auto' | `${number}%` | undefined): void;
+  setPositionAuto(edge: Edge): void;
+  setBoxSizing(boxSizing: BoxSizing): void;
+  setWidth(
+    width:
+      | number
+      | 'auto'
+      | 'fit-content'
+      | 'max-content'
+      | 'stretch'
+      | `${number}%`
+      | undefined,
+  ): void;
   setWidthAuto(): void;
+  setWidthFitContent(): void;
+  setWidthMaxContent(): void;
   setWidthPercent(width: number | undefined): void;
+  setWidthStretch(): void;
   unsetDirtiedFunc(): void;
   unsetMeasureFunc(): void;
   setAlwaysFormsContainingBlock(alwaysFormsContainingBlock: boolean): void;
@@ -216,6 +300,9 @@ export default function wrapAssembly(lib: any): Yoga {
       [Unit.Point]: lib.Node.prototype[fnName],
       [Unit.Percent]: lib.Node.prototype[`${fnName}Percent`],
       [Unit.Auto]: lib.Node.prototype[`${fnName}Auto`],
+      [Unit.MaxContent]: lib.Node.prototype[`${fnName}MaxContent`],
+      [Unit.FitContent]: lib.Node.prototype[`${fnName}FitContent`],
+      [Unit.Stretch]: lib.Node.prototype[`${fnName}Stretch`],
     };
 
     patch(lib.Node.prototype, fnName, function (original, ...args) {
@@ -227,6 +314,15 @@ export default function wrapAssembly(lib: any): Yoga {
 
       if (value === 'auto') {
         unit = Unit.Auto;
+        asNumber = undefined;
+      } else if (value == 'max-content') {
+        unit = Unit.MaxContent;
+        asNumber = undefined;
+      } else if (value == 'fit-content') {
+        unit = Unit.FitContent;
+        asNumber = undefined;
+      } else if (value == 'stretch') {
+        unit = Unit.Stretch;
         asNumber = undefined;
       } else if (typeof value === 'object') {
         unit = value.unit;
